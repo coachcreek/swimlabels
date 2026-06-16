@@ -28,16 +28,18 @@ python3 swimlabels.py ntc_dual
 python3 swimlabels.py ntc_dual --season 2025
 ```
 
-The generated PDF is written to `output/`, named after the input file with the
-`raw_` prefix replaced by `labels_`.
+The generated PDF is written to `output/<SEASON>/`, named after the input file
+with the `raw_` prefix replaced by `labels_`.
 
 ## Input files
 
-Place the raw meet results PDF in `input/`, named `raw_<CODE>.pdf` — for
-example `raw_ntc_dual.pdf`. The script globs `input/raw_<CODE>*.pdf`, so a
-**combo meet** can be produced by dropping multiple matching files (e.g.
-`raw_ccc_dual.pdf` and `raw_mb2_dual.pdf`); their labels are merged into a
-single `labels_combo_*.pdf`.
+Input and output are organized into per-season subdirectories (e.g.
+`input/2025/`, `input/2026/`). Place the raw meet results PDF in
+`input/<SEASON>/`, named `raw_<CODE>.pdf` — for example
+`input/2026/raw_ntc_dual.pdf`. The script globs
+`input/<SEASON>/raw_<CODE>*.pdf`, so a **combo meet** can be produced by
+dropping multiple matching files (e.g. `raw_ccc_dual.pdf` and
+`raw_mb2_dual.pdf`); their labels are merged into a single `labels_combo_*.pdf`.
 
 The meet date and the meet name as it appears in the results are read directly
 from the PDF, so they do not need to be configured.
@@ -58,7 +60,7 @@ seasons:
 ```
 
 To add a meet for a new season, add an entry under that season's `meets:` and
-drop the matching `raw_<CODE>.pdf` into `input/`.
+drop the matching `raw_<CODE>.pdf` into `input/<SEASON>/`.
 
 ## Setup
 

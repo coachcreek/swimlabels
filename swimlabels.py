@@ -214,17 +214,21 @@ def main() -> None:
     if not meet_clean:
         parser.error(f"Meet '{args.meet}' not found in season {args.season}")
 
+    # Input and output are organized into per-season subdirectories.
+    season_input_dir = INPUT_DIR / str(args.season)
+    season_output_dir = OUTPUT_DIR / str(args.season)
+
     # Look for input files matching the meet code
-    input_files = list(INPUT_DIR.glob(f"raw_{args.meet}*.pdf"))
+    input_files = list(season_input_dir.glob(f"raw_{args.meet}*.pdf"))
     if not input_files:
-        parser.error(f"No input files found for meet code '{args.meet}' in {INPUT_DIR}")
+        parser.error(f"No input files found for meet code '{args.meet}' in {season_input_dir}")
 
     input_filenames = sorted([f.name for f in input_files])
     output_filename = generate_output_filename(input_filenames)
 
     all_data = []
     for filename in input_filenames:
-        input_path = INPUT_DIR / filename
+        input_path = season_input_dir / filename
         if not input_path.exists():
             print(f"Error: input file not found: {input_path}", file=sys.stderr)
             sys.exit(1)
@@ -239,7 +243,8 @@ def main() -> None:
 
     sorted_data = sort_data(all_data)
 
-    output_path = OUTPUT_DIR / output_filename
+    season_output_dir.mkdir(parents=True, exist_ok=True)
+    output_path = season_output_dir / output_filename
     create_pdf(sorted_data, output_path)
     print(f"Created {output_path} with {len(sorted_data)} labels.")
 
