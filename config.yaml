@@ -1,0 +1,13 @@
+seasons:
+  2025:
+    meets:
+      ccc_dual: "Cress Creek Commons"
+      cccc_dual: "CCCC"
+      farmstead_dual: "Farmstead"
+      mb2_dual: "Maplebrook II"
+      ntc_dual: "SAY @ NTC"
+      time_trials: "Time Trials"
+      we_dual: "White Eagle"
+
+  2026:
+    meets: {}
