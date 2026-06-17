@@ -10,4 +10,10 @@ seasons:
       we_dual: "White Eagle"
 
   2026:
-    meets: {}
+    meets:
+      cccc_dual:
+        opponent: "CCCC"
+        home: false
+      steeplerun_dual:
+        opponent: "Steeple Run"
+        home: true

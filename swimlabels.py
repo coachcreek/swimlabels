@@ -171,6 +171,23 @@ def load_config(config_path: Path) -> dict:
         return yaml.safe_load(f)
 
 
+def format_meet_name(meet_config) -> str:
+    """Build the clean meet name printed on the label's last line.
+
+    A meet may be configured either as a plain string (printed verbatim) or as
+    a mapping with an ``opponent`` name and a ``home`` boolean. For the mapping
+    form the line reads ``{opponent} @ Saybrook`` when home and
+    ``Saybrook @ {opponent}`` when away.
+    """
+    if isinstance(meet_config, str):
+        return meet_config
+
+    opponent = meet_config["opponent"]
+    if meet_config.get("home"):
+        return f"{opponent} @ Saybrook"
+    return f"Saybrook @ {opponent}"
+
+
 def generate_output_filename(input_filenames: list[str]) -> str:
     """Generate output filename from input filename(s) by replacing 'raw_' with 'labels_'."""
     if len(input_filenames) == 1:
@@ -210,9 +227,10 @@ def main() -> None:
     if args.season not in config.get("seasons", {}):
         parser.error(f"Season {args.season} not found in config")
 
-    meet_clean = config["seasons"][args.season].get("meets", {}).get(args.meet)
-    if not meet_clean:
+    meet_config = config["seasons"][args.season].get("meets", {}).get(args.meet)
+    if not meet_config:
         parser.error(f"Meet '{args.meet}' not found in season {args.season}")
+    meet_clean = format_meet_name(meet_config)
 
     # Input and output are organized into per-season subdirectories.
     season_input_dir = INPUT_DIR / str(args.season)
