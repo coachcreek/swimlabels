@@ -1,19 +1,54 @@
 seasons:
   2025:
     meets:
+      ashb_dual: "Ashbury"
       ccc_dual: "Cress Creek Commons"
       cccc_dual: "CCCC"
       farmstead_dual: "Farmstead"
       mb2_dual: "Maplebrook II"
-      ntc_dual: "SAY @ NTC"
+      nch_dual: "Naper Carriage Hill"
+      ntc_dual: "Naperville Tennis Club"
       time_trials: "Time Trials"
       we_dual: "White Eagle"
 
   2026:
     meets:
+      ccc_dual:
+        opponent: "Cress Creek Commons"
+        home: false
       cccc_dual:
         opponent: "CCCC"
         home: false
       steeplerun_dual:
         opponent: "Steeple Run"
         home: true
+      stillwater_dual:
+        opponent: "Stillwater"
+        home: true
+
+# Manual data fixes applied during parsing, to work around messy names in the
+# raw results PDFs. Names are stripped of surrounding whitespace before these
+# are applied, so keys are matched against the trimmed value.
+corrections:
+  # Exact-match name replacements, applied to both first and last names.
+  # Key: the parsed (whitespace-stripped) name. Value: the name to use instead.
+  names:
+    "Evie or Everly E": "Everly E"
+    "John Henry H": "John Henry"
+    "Omalley": "O'Malley"
+    "Wells -": "Wells"
+    "Wren or Wrenna R": "Wren"
+    "G J": "Gianna"
+
+  # Per-record overrides keyed on the full identity of a single result, used
+  # for one-off fixes (e.g. a relay swimmer recorded under the wrong name).
+  # Each entry's `match` must equal the parsed values; `set` replaces them.
+  records:
+    - match:
+        meet_name_raw: "SAY @ NTC 2025"
+        event_name: "200 Yard Medley Relay"
+        last_name: "Jurjovec"
+        first_name: "George W"
+      set:
+        last_name: "Creek"
+        first_name: "Killian M"

@@ -1,5 +1,7 @@
 input/
 output/
+data/
+tests/snapshots/
 venv/
 *.pyc
 __pycache__/

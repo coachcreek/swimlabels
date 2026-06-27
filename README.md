@@ -62,6 +62,17 @@ seasons:
 To add a meet for a new season, add an entry under that season's `meets:` and
 drop the matching `raw_<CODE>.pdf` into `input/<SEASON>/`.
 
+### Name corrections
+
+The raw PDFs sometimes contain messy or ambiguous swimmer names. The
+`corrections:` section of `config.yaml` fixes these without code changes:
+
+- `names:` — exact-match replacements applied to any parsed first or last
+  name. Keys must reproduce the parsed value **including trailing spaces**.
+- `records:` — one-off overrides for a single result, matched on fields such
+  as `meet_name_raw`, `event_name`, `last_name` and `first_name`; the `set:`
+  block replaces the matched fields.
+
 ## Setup
 
 ```bash
@@ -69,3 +80,17 @@ python3 -m venv venv
 source venv/bin/activate
 pip install PyPDF2 reportlab pyyaml
 ```
+
+## Tests
+
+Characterization tests pin the parser output against snapshots of the real
+meet PDFs, so refactors that change parsing get caught:
+
+```bash
+python3 -m unittest tests.test_parsing
+
+# Regenerate snapshots after an intentional parser change:
+python3 tests/test_parsing.py --update
+```
+
+The source PDFs are gitignored, so the tests require the local `input/` files.
