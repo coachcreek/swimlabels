@@ -210,7 +210,7 @@ def main() -> None:
         raw_text = extract_text(input_path)
         # Date and raw meet name are derived per-file from the PDF itself.
         date, meet_raw = extract_meet_info(clean_non_ascii(raw_text))
-        all_data += parse_text(raw_text, meet_raw, date, meet_clean)
+        all_data += parse_text(raw_text, meet_raw, date, meet_clean, corrections)
 
     if not all_data:
         print("Error: no label data parsed from input file(s).", file=sys.stderr)
