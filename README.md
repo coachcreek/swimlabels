@@ -54,25 +54,36 @@ from the PDF, so they do not need to be configured.
 `config.yaml` maps each meet code to the clean meet name printed on the label,
 grouped by season. A meet may be configured two ways:
 
-- **Plain string** — printed verbatim as the meet name.
-- **Home/away mapping** — an `opponent` name plus a `home` boolean. The label
-  reads `<opponent> @ Saybrook` when `home: true` and `Saybrook @ <opponent>`
-  when `home: false`.
+- **Plain string** — printed verbatim as the meet name. Used for meets with no
+  opponent, e.g. Time Trials.
+- **Venue mapping** — an `opponent` name plus a `venue` of `home`, `away`, or
+  `invite`:
+  - `home` → `<opponent> @ Saybrook`
+  - `away` → `Saybrook @ <opponent>`
+  - `invite` → `<opponent>` (printed verbatim). An **invite** is hosted by one
+    team but includes swimmers from many, so there is no single opponent — the
+    `opponent` field holds the invite's name and prints as-is, without the
+    `@ Saybrook` framing.
 
 ```yaml
 seasons:
   2025:
     meets:
-      ntc_dual: "Naperville Tennis Club"
-      we_dual: "White Eagle"
+      time_trials: "Time Trials"
+      ntc_dual:
+        venue: away
+        opponent: "Naperville Tennis Club"
   2026:
     meets:
       steeplerun_dual:
+        venue: home
         opponent: "Steeple Run"
-        home: true
       ccc_dual:
+        venue: away
         opponent: "Cress Creek Commons"
-        home: false
+      ntc_invite:
+        venue: invite
+        opponent: "Naperville Tennis Club 8&Under Invite"
 ```
 
 To add a meet for a new season, add an entry under that season's `meets:` and

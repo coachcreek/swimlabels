@@ -97,8 +97,11 @@ def create_pdf(sorted_data: list[dict], output_path: Path) -> None:
     y = letter[1] - margin_top
 
     for i, entry in enumerate(sorted_data):
+        # Heat is optional; some meets don't record it, so drop it from the
+        # first line rather than printing "Heat: None".
+        heat_prefix = f"Heat: {entry['heat']}  " if entry.get("heat") else ""
         lines = [
-            f"Heat: {entry['heat']}  Place: {entry['place']}  Time: {entry['time']}",
+            f"{heat_prefix}Place: {entry['place']}  Time: {entry['time']}",
             f"{entry['event_num']}  {entry['gender']}  {entry['age']}  {entry['event_name']}",
             f"{entry['last_name']}, {entry['first_name']}",
             f"Saybrook Sharks - {entry['meet_date']}",
@@ -130,18 +133,26 @@ def load_config(config_path: Path) -> dict:
 def format_meet_name(meet_config) -> str:
     """Build the clean meet name printed on the label's last line.
 
-    A meet may be configured either as a plain string (printed verbatim) or as
-    a mapping with an ``opponent`` name and a ``home`` boolean. For the mapping
-    form the line reads ``{opponent} @ Saybrook`` when home and
-    ``Saybrook @ {opponent}`` when away.
+    A meet may be configured either as a plain string (printed verbatim, e.g.
+    Time Trials) or as a mapping with an ``opponent`` name and a ``venue``:
+
+    - ``home``   -> ``{opponent} @ Saybrook``
+    - ``away``   -> ``Saybrook @ {opponent}``
+    - ``invite`` -> ``{opponent}`` (an invite is hosted by one team but draws
+      many; there is no single opponent, so the invite name prints verbatim)
     """
     if isinstance(meet_config, str):
         return meet_config
 
     opponent = meet_config["opponent"]
-    if meet_config.get("home"):
+    venue = meet_config["venue"]
+    if venue == "invite":
+        return opponent
+    if venue == "home":
         return f"{opponent} @ Saybrook"
-    return f"Saybrook @ {opponent}"
+    if venue == "away":
+        return f"Saybrook @ {opponent}"
+    raise ValueError(f"Unknown venue {venue!r} for opponent {opponent!r}")
 
 
 def generate_output_filename(input_filenames: list[str]) -> str:

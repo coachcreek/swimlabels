@@ -38,8 +38,10 @@ def extract_meet_info(raw_text: str) -> tuple[str, str]:
     month, day, year = match.group(1), match.group(2), match.group(3)
     date = f"{int(month):02d}/{int(day):02d}/{int(year) % 100:02d}"
 
-    # Strip any run-on record that the PDF glued onto the meet-name line.
-    meet_raw = re.split(r'Heat:', match.group(4))[0].strip()
+    # Strip any run-on record that the PDF glued onto the meet-name line. Some
+    # meets omit the Heat: field, so the glued-on record starts with Place:
+    # instead; split on whichever field marker comes first.
+    meet_raw = re.split(r'Heat:|Place:', match.group(4))[0].strip()
 
     return date, meet_raw
 
@@ -97,7 +99,9 @@ def parse_text(
             continue
 
         try:
-            heat = re.search(r'Heat\W+(\d+)\W+Place', segment, re.MULTILINE).group(1)
+            # Heat is optional: some meets omit it, leaving a bare "Place:" line.
+            heat_match = re.search(r'Heat\W+(\d+)\W+Place', segment, re.MULTILINE)
+            heat = heat_match.group(1) if heat_match else None
             place = re.search(r'Place\W+(\d+[a-z]{2})\W+Time', segment, re.MULTILINE).group(1)
             time = re.search(r'Time\W+([\d\W]+( +CITY)?)$', segment, re.MULTILINE).group(1)
             event_num = re.search(r'^(#\d+)\W+(Boys|Girls)\W+\d', segment, re.MULTILINE).group(1)

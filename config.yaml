@@ -1,30 +1,60 @@
 seasons:
   2025:
     meets:
-      ashb_dual: "Ashbury"
-      ccc_dual: "Cress Creek Commons"
-      cccc_dual: "CCCC"
-      farmstead_dual: "Farmstead"
-      mb2_dual: "Maplebrook II"
-      nch_dual: "Naper Carriage Hill"
-      ntc_dual: "Naperville Tennis Club"
+      ashb_dual:
+        venue: home
+        opponent: "Ashbury"
+      ccc_dual:
+        venue: home
+        opponent: "Cress Creek Commons"
+      cccc_dual:
+        venue: home
+        opponent: "CCCC"
+      farmstead_dual:
+        venue: home
+        opponent: "Farmstead"
+      mb2_dual:
+        venue: away
+        opponent: "Maplebrook II"
+      nch_dual:
+        venue: away
+        opponent: "Naper Carriage Hill"
+      ntc_dual:
+        venue: away
+        opponent: "Naperville Tennis Club"
+      # Time Trials is our own intra-team event; it has no opponent, so its
+      # name prints verbatim via the plain-string config form.
       time_trials: "Time Trials"
-      we_dual: "White Eagle"
+      we_dual:
+        venue: home
+        opponent: "White Eagle"
 
   2026:
     meets:
       ccc_dual:
+        venue: away
         opponent: "Cress Creek Commons"
-        home: false
       cccc_dual:
+        venue: away
         opponent: "CCCC"
-        home: false
+      ntc_dual:
+        venue: home
+        opponent: "Naperville Tennis Club"
+      ntc_invite:
+        venue: invite
+        opponent: "Naperville Tennis Club 8&Under Invite"
       steeplerun_dual:
+        venue: home
         opponent: "Steeple Run"
-        home: true
       stillwater_dual:
+        venue: home
         opponent: "Stillwater"
-        home: true
+      tallgrass_dual:
+        venue: away
+        opponent: "Tall Grass"
+      we_dual:
+        venue: away
+        opponent: "White Eagle"
 
 # Manual data fixes applied during parsing, to work around messy names in the
 # raw results PDFs. Names are stripped of surrounding whitespace before these
